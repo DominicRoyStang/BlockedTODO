@@ -1,0 +1,23 @@
+name: onCommit
+run-name: onCommit for ${{ github.sha }}
+on: [push]
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    container: node:20
+    defaults:
+      run:
+        working-directory: ./services/backend
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: blockedtodo-database
+      - name: Display structure of downloaded files
+        run: ls -la
+      - run: 'echo -e "Run: $(date +%s),\n" >> database.txt'
+      - uses: actions/upload-artifact@v4
+        with:
+          name: blockedtodo-database
+          path: ./database.txt
