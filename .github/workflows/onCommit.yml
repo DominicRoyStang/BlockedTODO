@@ -2,9 +2,12 @@ name: onCommit
 run-name: onCommit for ${{ github.sha }}
 on: [push]
 jobs:
-  scan:
+  scan1:
     runs-on: ubuntu-latest
     container: node:20
+    concurrency:
+      group: ${{ github.workflow }}
+      cancel-in-progress: true
     defaults:
       run:
         working-directory: ./services/backend
@@ -21,3 +24,30 @@ jobs:
         with:
           name: blockedtodo-database
           path: ./database.txt
+
+  scan2:
+    runs-on: ubuntu-latest
+    container: node:20
+    defaults:
+      run:
+        working-directory: ./services/backend
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - run: ls -la
+      - run: npm install
+      - run: node ./scripts/download-db-artifact.js
+      - run: ls -la
+      - run: ls -la downloaded
+      - run: 'echo -e "Run: $(date +%s),\n" >> database.txt'
+      - run: 'echo "hello world" > other_artifact.txt'
+      - uses: actions/upload-artifact@v4
+        with:
+          name: blockedtodo-database
+          path: services/backend/database.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: other_artifact
+          path: services/backend/other_artifact.txt
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
