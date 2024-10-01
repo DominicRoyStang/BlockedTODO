@@ -1,6 +1,7 @@
 import fs from 'fs'
 import { promises as fsPromises } from 'fs'
 import { exec } from 'child_process'
+import unzipper from 'unzipper';
 import axios from 'axios'
 
 const headers = {
@@ -57,28 +58,13 @@ const downloadArtifact = async (artifactId) => {
     });
   }
 
-  const asyncWriteFile = (data, outputPath) => {
-    return new Promise((resolve, reject) => {
-        const stream = data.pipe(fs.createWriteStream(outputPath));
-
-        stream.on('close', () => {
-            console.info(`file written: ${outputPath}`);
-            resolve(outputPath);
-        });
-    });
-  };
-
   try {
     // https://docs.github.com/en/rest/actions/artifacts?apiVersion=2022-11-28#download-an-artifact
     const artifactDownloadUrlResponse = await githubClient.get(`/actions/artifacts/${artifactId}/zip`)
-    //console.log({ artifactDownloadUrlResponse })
-    //const response = await axios.get(artifactDownloadUrlResponse.headers.Location, {responseType: 'stream'})
-    //console.log({ response })
     const destination = './downloaded'
     await fsPromises.mkdir(destination)
     const zipLocation = `${destination}/artifact.zip`
     await fsPromises.writeFile(zipLocation, artifactDownloadUrlResponse.data)
-    //await asyncWriteFile(artifactDownloadUrlResponse.data, zipLocation);
     exec('pwd && ls -la', (error, stdout, stderr) => {
       console.log('stdout: ' + stdout);
       console.log('stderr: ' + stderr);
