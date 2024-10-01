@@ -4,6 +4,7 @@
     "url": "https://github.com/blockedtodo/blockedtodo/issues"
   },
   "dependencies": {
+    "@actions/artifact": "^2.1.9",
     "@google-cloud/storage": "^6.5.2",
     "@octokit/auth-app": "^3.5.3",
     "@octokit/webhooks": "^10.0.7",

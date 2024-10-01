@@ -3,6 +3,8 @@ import { promises as fsPromises } from 'fs'
 import { exec } from 'child_process'
 import unzipper from 'unzipper';
 import axios from 'axios'
+//import { DefaultArtifactClient } from '@actions/artifact'
+import { DefaultArtifactClient } from '@actions/artifact'
 
 const headers = {
   'Accept': 'application/vnd.github+json',
@@ -14,6 +16,7 @@ const githubClient = axios.create({
   baseURL: 'https://api.github.com/repos/BlockedTODO/BlockedTODO',
   headers,
 })
+const artifactClient = new DefaultArtifactClient()
 
 // PLAN
 // - List blockedtodo-database artifacts for this repo
@@ -91,4 +94,17 @@ const results = await Promise.allSettled(artifactsToBeDeleted.map(artifact => de
 console.log({ deletionPromiseResults: results })
 
 // Download mostRecentArtifact
-await downloadArtifact(mostRecentArtifact.id)
+const destination = './downloaded'
+await fsPromises.mkdir(destination)
+const zipLocation = `${destination}/artifact.zip`
+console.log({ artifactClient })
+const downloadedArtifact = await artifactClient.downloadArtifact(mostRecentArtifact.id, { path: destination })
+console.log({ downloadedArtifact })
+exec('pwd && ls -la', (error, stdout, stderr) => {
+  console.log('stdout: ' + stdout);
+  console.log('stderr: ' + stderr);
+  if (error !== null) {
+      console.log('exec error: ' + error);
+  }
+})
+//await downloadArtifact(mostRecentArtifact.id)

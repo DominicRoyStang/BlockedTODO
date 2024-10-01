@@ -12,6 +12,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
       - run: ls -la
+      - run: env
       - run: npm install
       - run: node ./scripts/download-db-artifact.js
       - run: ls -la
@@ -28,3 +29,4 @@ jobs:
           path: services/backend/other_artifact.txt
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      ACTIONS_RUNTIME_TOKEN: ${{ secrets.GITHUB_TOKEN }}
