@@ -3,7 +3,6 @@ import { promises as fsPromises } from 'fs'
 import { exec } from 'child_process'
 import unzipper from 'unzipper';
 import axios from 'axios'
-//import { DefaultArtifactClient } from '@actions/artifact'
 import { DefaultArtifactClient } from '@actions/artifact'
 
 const headers = {
@@ -65,9 +64,14 @@ const downloadArtifact = async (artifactId) => {
     // https://docs.github.com/en/rest/actions/artifacts?apiVersion=2022-11-28#download-an-artifact
     const artifactDownloadUrlResponse = await githubClient.get(`/actions/artifacts/${artifactId}/zip`)
     const destination = './downloaded'
-    await fsPromises.mkdir(destination)
+    if (!fs.existsSync(destination)) {
+      await fsPromises.mkdir(destination)
+    }
     const zipLocation = `${destination}/artifact.zip`
+
+    console.log('writing data...')
     await fsPromises.writeFile(zipLocation, artifactDownloadUrlResponse.data)
+    console.log('running ls -la...')
     exec('pwd && ls -la', (error, stdout, stderr) => {
       console.log('stdout: ' + stdout);
       console.log('stderr: ' + stderr);
@@ -75,6 +79,7 @@ const downloadArtifact = async (artifactId) => {
           console.log('exec error: ' + error);
       }
     })
+    console.log('starting unzip...')
     await asyncUnzip(zipLocation, destination)
   } catch (error) {
     console.error('ERROR')
@@ -98,7 +103,8 @@ const destination = './downloaded'
 await fsPromises.mkdir(destination)
 const zipLocation = `${destination}/artifact.zip`
 console.log({ artifactClient })
-const downloadedArtifact = await artifactClient.downloadArtifact(mostRecentArtifact.id, { path: destination })
+const downloadedArtifact = await downloadArtifact(mostRecentArtifact.id)
+//const downloadedArtifact = await artifactClient.downloadArtifact(mostRecentArtifact.id, { path: destination })
 console.log({ downloadedArtifact })
 exec('pwd && ls -la', (error, stdout, stderr) => {
   console.log('stdout: ' + stdout);
