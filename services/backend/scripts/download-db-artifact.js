@@ -62,7 +62,7 @@ const downloadArtifact = async (artifactId) => {
 
   try {
     // https://docs.github.com/en/rest/actions/artifacts?apiVersion=2022-11-28#download-an-artifact
-    const artifactDownloadUrlResponse = await githubClient.get(`/actions/artifacts/${artifactId}/zip`)
+    const artifactDownloadUrlResponse = await githubClient.get(`/actions/artifacts/${artifactId}/zip`, { responseType: 'stream' })
     const destination = './downloaded'
     if (!fs.existsSync(destination)) {
       await fsPromises.mkdir(destination)
@@ -81,6 +81,14 @@ const downloadArtifact = async (artifactId) => {
     })
     console.log('starting unzip...')
     await asyncUnzip(zipLocation, destination)
+    console.log('database.txt data:')
+    exec(`cat ${destination}/database.txt`, (error, stdout, stderr) => {
+      console.log('stdout: ' + stdout);
+      console.log('stderr: ' + stderr);
+      if (error !== null) {
+          console.log('exec error: ' + error);
+      }
+    })
   } catch (error) {
     console.error('ERROR')
     console.error(`${error?.response?.status}: ${error?.response?.statusText}, ${error?.message}`)
