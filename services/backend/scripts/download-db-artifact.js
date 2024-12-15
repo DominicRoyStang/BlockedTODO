@@ -60,39 +60,24 @@ const downloadArtifact = async (artifactId) => {
     });
   }
 
-  try {
-    // https://docs.github.com/en/rest/actions/artifacts?apiVersion=2022-11-28#download-an-artifact
-    const artifactDownloadUrlResponse = await githubClient.get(`/actions/artifacts/${artifactId}/zip`, { responseType: 'stream' })
-    const destination = './downloaded'
-    if (!fs.existsSync(destination)) {
-      await fsPromises.mkdir(destination)
-    }
-    const zipLocation = `${destination}/artifact.zip`
-
-    console.log('writing data...')
-    await fsPromises.writeFile(zipLocation, artifactDownloadUrlResponse.data)
-    console.log('running ls -la...')
-    exec('pwd && ls -la', (error, stdout, stderr) => {
-      console.log('stdout: ' + stdout);
-      console.log('stderr: ' + stderr);
-      if (error !== null) {
-          console.log('exec error: ' + error);
-      }
-    })
-    console.log('starting unzip...')
-    await asyncUnzip(zipLocation, destination)
-    console.log('database.txt data:')
-    exec(`cat ${destination}/database.txt`, (error, stdout, stderr) => {
-      console.log('stdout: ' + stdout);
-      console.log('stderr: ' + stderr);
-      if (error !== null) {
-          console.log('exec error: ' + error);
-      }
-    })
-  } catch (error) {
-    console.error('ERROR')
-    console.error(`${error?.response?.status}: ${error?.response?.statusText}, ${error?.message}`)
+  // https://docs.github.com/en/rest/actions/artifacts?apiVersion=2022-11-28#download-an-artifact
+  const artifactDownloadUrlResponse = await githubClient.get(`/actions/artifacts/${artifactId}/zip`, { responseType: 'stream' })
+  const destination = './downloaded'
+  if (!fs.existsSync(destination)) {
+    await fsPromises.mkdir(destination)
   }
+  const zipLocation = `${destination}/artifact.zip`
+
+  console.log('writing data...')
+  await fsPromises.writeFile(zipLocation, artifactDownloadUrlResponse.data)
+
+  console.log('starting unzip...')
+  await asyncUnzip(zipLocation, destination)
+
+  const databaseData = fs.readFileSync(`${destination}/database.txt`, 'utf-8')
+  console.log('database.txt data:\n' + databaseData)
+
+  return databaseData
 }
 
 const { total_count, artifacts } = await listArtifacts()
@@ -109,16 +94,6 @@ console.log({ deletionPromiseResults: results })
 // Download mostRecentArtifact
 const destination = './downloaded'
 await fsPromises.mkdir(destination)
-const zipLocation = `${destination}/artifact.zip`
 console.log({ artifactClient })
 const downloadedArtifact = await downloadArtifact(mostRecentArtifact.id)
-//const downloadedArtifact = await artifactClient.downloadArtifact(mostRecentArtifact.id, { path: destination })
 console.log({ downloadedArtifact })
-exec('pwd && ls -la', (error, stdout, stderr) => {
-  console.log('stdout: ' + stdout);
-  console.log('stderr: ' + stderr);
-  if (error !== null) {
-      console.log('exec error: ' + error);
-  }
-})
-//await downloadArtifact(mostRecentArtifact.id)
