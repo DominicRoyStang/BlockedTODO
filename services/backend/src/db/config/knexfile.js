@@ -14,7 +14,7 @@ const knexConfig = {
         /* Set postgres column names as snake_case, but return objects with camelCase
          * Each query written in JavaScript must be written with camelCase.
          * The conversion to snake_case will happen automatically. */
-        ...knexSnakeCaseMappers(),
+        //...knexSnakeCaseMappers(),
     },
     test: {
         client: 'sqlite3',
@@ -25,7 +25,7 @@ const knexConfig = {
         /* Set postgres column names as snake_case, but return objects with camelCase
          * Each query written in JavaScript must be written with camelCase.
          * The conversion to snake_case will happen automatically. */
-        ...knexSnakeCaseMappers(),
+        //...knexSnakeCaseMappers(),
     },
     production: {
         client: 'sqlite3',
@@ -36,7 +36,7 @@ const knexConfig = {
         /* Set postgres column names as snake_case, but return objects with camelCase
          * Each query written in JavaScript must be written with camelCase.
          * The conversion to snake_case will happen automatically. */
-        ...knexSnakeCaseMappers(),
+        //...knexSnakeCaseMappers(),
     }
 };
 
