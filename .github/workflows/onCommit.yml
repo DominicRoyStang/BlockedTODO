@@ -20,7 +20,7 @@ jobs:
       - run: 'echo "hello world" > other_artifact.txt'
       - uses: actions/upload-artifact@v4
         with:
-          name: blockedtodo-database
+          name: blockedtodo-database-test
           path: services/backend/downloaded/database.txt
       - uses: actions/upload-artifact@v4
         with:
@@ -29,7 +29,7 @@ jobs:
       - run: 'npm run db:migrate'
       - uses: actions/upload-artifact@v4
         with:
-          name: blockedtodo-database-2
+          name: blockedtodo-database
           path: services/backend/downloaded/database.db
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

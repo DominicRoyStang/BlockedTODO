@@ -74,8 +74,12 @@ const downloadArtifact = async (artifactId) => {
   console.log('starting unzip...')
   await asyncUnzip(zipLocation, destination)
 
-  const databaseData = fs.readFileSync(`${destination}/database.txt`, 'utf-8')
-  console.log('database.txt data:\n' + databaseData)
+  const databaseFile = `${destination}/database.db`
+
+  if (!fs.existsSync(databaseFile)) return
+
+  const databaseData = fs.readFileSync(databaseFile, 'utf-8')
+  console.log(`${databaseFile} data:\n` + databaseData)
 
   return databaseData
 }
