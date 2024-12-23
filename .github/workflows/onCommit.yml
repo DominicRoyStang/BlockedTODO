@@ -26,6 +26,17 @@ jobs:
         with:
           name: other_artifact
           path: services/backend/other_artifact.txt
+      - run: 'npm run db:migrate'
+      - uses: actions/upload-artifact@v4
+        with:
+          name: blockedtodo-database-2
+          path: services/backend/downloaded/database.db
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       ACTIONS_RUNTIME_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # Environment variables to remove
+      GITHUB_WEBHOOKS_SECRET: 'TODO: delete'
+      GITHUB_APP_ID: 'TODO: delete'
+      GITHUB_APP_PRIVATE_KEY: 'TODO: delete'
+      GITHUB_CLIENT_ID: 'TODO: delete'
+      GITHUB_CLIENT_SECRET: 'TODO: delete'

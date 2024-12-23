@@ -24,6 +24,7 @@
     "pg-hstore": "^2.3.4",
     "re2": "^1.26.1",
     "serialize-error": "^11.0.0",
+    "sqlite3": "^5.1.7",
     "tempy": "^3.0.0",
     "unzipper": "^0.10.11",
     "url-regex-safe": "^3.0.0",

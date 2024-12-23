@@ -6,9 +6,9 @@ const {name: database, user, password, host, port} = config.database;
 
 const knexConfig = {
     development: {
-        client: 'postgresql',
-        connection: {database, user, password, host, port},
-        pool: {min: 2, max: 16},
+        client: 'sqlite3',
+        useNullAsDefault: true,
+        connection: {filename: '../../../downloaded/database.db'},
         migrations: {directory: '../migrations'},
         seeds: {directory: '../seeds'},
         /* Set postgres column names as snake_case, but return objects with camelCase
@@ -17,9 +17,9 @@ const knexConfig = {
         ...knexSnakeCaseMappers(),
     },
     test: {
-        client: 'postgresql',
-        connection: {database, user, password, host, port},
-        pool: {min: 2, max: 16},
+        client: 'sqlite3',
+        useNullAsDefault: true,
+        connection: {filename: '../../../downloaded/database.db'},
         migrations: {directory: '../migrations'},
         seeds: {directory: '../seeds'},
         /* Set postgres column names as snake_case, but return objects with camelCase
@@ -28,9 +28,9 @@ const knexConfig = {
         ...knexSnakeCaseMappers(),
     },
     production: {
-        client: 'postgresql',
-        connection: {database, user, password, host, port},
-        pool: {min: 2, max: 16},
+        client: 'sqlite3',
+        useNullAsDefault: true,
+        connection: {filename: '../../../downloaded/database.db'},
         migrations: {directory: '../migrations'},
         seeds: {directory: '../seeds'},
         /* Set postgres column names as snake_case, but return objects with camelCase
