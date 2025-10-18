@@ -27,6 +27,7 @@ jobs:
           name: other_artifact
           path: services/backend/other_artifact.txt
       - run: 'npm run db:migrate'
+      - run: 'node ./scripts/scan-this-codebase.js'
       - uses: actions/upload-artifact@v4
         with:
           name: blockedtodo-database

@@ -1,6 +1,5 @@
 import fs from 'fs'
 import { promises as fsPromises } from 'fs'
-import { exec } from 'child_process'
 import unzipper from 'unzipper';
 import axios from 'axios'
 import { DefaultArtifactClient } from '@actions/artifact'
