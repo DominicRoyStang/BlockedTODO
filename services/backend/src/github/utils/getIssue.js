@@ -1,5 +1,5 @@
 import {URL} from 'url';
-import {logger, graphqlRequestBody} from '../../utils/index.js';
+import {logger} from '../../utils/index.js';
 
 const PATHNAME_REGEX = /\/(?<owner>.+)\/(?<name>.+)\/issues\/(?<issueNumber>\d+)/;
 
@@ -12,22 +12,13 @@ const getIssue = async (githubClient, issue) => {
     const issueUrl = new URL(issue.url);
     const {owner, name, issueNumber} = issueUrl.pathname.match(PATHNAME_REGEX).groups;
 
-    const issueQuery = graphqlRequestBody(`
-        query {
-            repository(owner: "${owner}", name: "${name}") {
-                issue(number: ${issueNumber}) {
-                    title
-                    closed
-                }
-            }
-        }
-    `);
-
-    // Query issue
-    const response = await githubClient.post('/graphql', issueQuery);
+    const response = await githubClient.get(`/repos/${owner}/${name}/issues/${issueNumber}`);
     logger.info(`Response from GitHub: ${response.status}`, {response});
 
-    return response.data.data.repository.issue;
+    return {
+        title: response.data.title,
+        closed: response.data.state === 'closed',
+    };
 };
 
 export default getIssue;

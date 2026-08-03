@@ -1,28 +1,13 @@
 import Repository from './repository.js';
 
 describe('insert', () => {
+    it('creates a repository from a node id', async () => {
+        const repository = await Repository.query().insert({nodeId: 'testowner/testrepo'});
+        expect(repository.nodeId).toEqual('testowner/testrepo');
+    });
+
     it('rejects an empty node id', async () => {
-        const insertQuery = Repository.query().insert({nodeId: '', installationId: 123});
-        await expect(insertQuery).rejects.toThrowError();
-    });
-
-    it('rejects an empty installation id', async () => {
-        const insertQuery = Repository.query().insert({nodeId: 'abc123'});
-        await expect(insertQuery).rejects.toThrowError();
-    });
-
-    it('rejects a null installation id', async () => {
-        const insertQuery = Repository.query().insert({nodeId: '', installationId: null});
-        await expect(insertQuery).rejects.toThrowError();
-    });
-
-    it('rejects a string installation id', async () => {
-        const insertQuery = Repository.query().insert({nodeId: '', installationId: '123'});
-        await expect(insertQuery).rejects.toThrowError();
-    });
-
-    it('rejects a negative installation id', async () => {
-        const insertQuery = Repository.query().insert({nodeId: '', installationId: -123});
+        const insertQuery = Repository.query().insert({nodeId: ''});
         await expect(insertQuery).rejects.toThrowError();
     });
 });
