@@ -1,5 +1,5 @@
 name: BlockedTODO
-description: Scan the repository for BlockedTODO comments and open issues when watched issues are closed
+description: Scans the repository for BlockedTODO comments and open issues when watched issues are closed
 author: Dominic Roy-Stang
 
 inputs:
