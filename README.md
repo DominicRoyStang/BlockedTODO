@@ -58,7 +58,7 @@ jobs:
       - uses: DominicRoyStang/BlockedTODO@v1
 ```
 
-**Note**: BlockedTODO's state is stored in GitHub Actions artifacts. The `schedule` in the config above is required to avoid losing the state when GitHub artifacts expire after your repository's retention period (90 days by default).
+**Note**: BlockedTODO's state is stored in GitHub Actions artifacts. The `schedule` in the config above is required to ensure the state is never lost because of artifact expiry.
 
 ## About
 ### When would I need this?

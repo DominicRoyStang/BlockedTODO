@@ -5,7 +5,9 @@
 
 # Running locally
 
-Environment variables are defined in [`services/backend/src/utils/environment.js`](../services/backend/src/utils/environment.js). Defaults cover local development. For a real scan you need a GitHub token with `issues: write` (and `actions: write` if downloading artifacts):
+Environment variables are defined in [`services/backend/src/utils/environment.js`](../services/backend/src/utils/environment.js). Defaults cover local development. For a real scan you need a GitHub token with the following permissions:
+- `issues: write` for reading and writing issues
+- `actions: write` if uploading and downloading artifacts
 
 ```bash
 cd services/backend
