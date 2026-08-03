@@ -1,4 +1,5 @@
 import {Repository} from '../index.js';
+import {sleep} from '../../utils/index.js';
 
 describe('mixins', () => {
     it('is given an id (uuid) automatically', async () => {
@@ -44,6 +45,7 @@ describe('timestamps', () => {
         const repo = await Repository.query().insert({nodeId: 'abc123'});
         const {createdAt: preCreatedAt, updatedAt: preUpdatedAt} = repo;
 
+        await sleep(10);
         await repo.$query().patch({nodeId: 'xyz789'});
 
         expect(repo.createdAt).toEqual(preCreatedAt);
@@ -54,6 +56,7 @@ describe('timestamps', () => {
         const repo = await Repository.query().insert({nodeId: 'abc123'});
         const {createdAt: preCreatedAt, updatedAt: preUpdatedAt} = repo;
 
+        await sleep(10);
         await repo.$query().update({nodeId: 'newNodeId'});
 
         expect(repo.createdAt).toEqual(preCreatedAt);
