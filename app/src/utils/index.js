@@ -4,6 +4,5 @@ export {default as asyncUnzip} from './asyncUnzip.js';
 export {default as DEFAULT_CONFIG} from './defaultConfig.js';
 export {default as escapeRegex} from './escapeRegex.js';
 export * as markdownHelpers from './markdownHelpers.js';
-export {AuthenticationError} from './errors.js';
 export {filepath, dirpath, filename, dirname, resolvePath} from './pathHelpers.js';
 export {default as sleep} from './sleep.js';
