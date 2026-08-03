@@ -6,7 +6,7 @@
   "dependencies": {
     "@google-cloud/storage": "^6.5.2",
     "@octokit/auth-app": "^3.5.3",
-    "@octokit/webhooks": "^10.0.7",
+    "@octokit/webhooks": "^14.2.0",
     "ajv-formats": "^2.1.1",
     "axios": "^0.27.2",
     "dotenv": "^16.0.3",
