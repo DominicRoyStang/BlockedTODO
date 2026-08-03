@@ -1,16 +1,16 @@
 # Local setup
 
 1. Install Node.js 22 or higher
-2. From `services/backend`, install dependencies: `npm install`
+2. From `app`, install dependencies: `npm install`
 
 # Running locally
 
-Environment variables are defined in [`services/backend/src/utils/environment.js`](../services/backend/src/utils/environment.js). Defaults cover local development. For a real scan you need a GitHub token with the following permissions:
+Environment variables are defined in [`app/src/utils/environment.js`](../app/src/utils/environment.js). Defaults cover local development. For a real scan you need a GitHub token with the following permissions:
 - `issues: write` for reading and writing issues
 - `actions: write` if uploading and downloading artifacts
 
 ```bash
-cd services/backend
+cd app
 npm run db:migrate
 GITHUB_TOKEN=<token> GITHUB_REPOSITORY=<owner/repo> SCAN_DIR=<path-to-code> npm run scan
 ```
@@ -18,7 +18,7 @@ GITHUB_TOKEN=<token> GITHUB_REPOSITORY=<owner/repo> SCAN_DIR=<path-to-code> npm 
 # Tests
 
 ```bash
-cd services/backend
+cd app
 npm test
 ```
 

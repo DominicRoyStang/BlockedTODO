@@ -1,4 +1,4 @@
-# BlockedTODO Backend
+# BlockedTODO App
 
 Core scan logic for the BlockedTODO GitHub Action.
 

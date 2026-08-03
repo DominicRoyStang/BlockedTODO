@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: services/backend
+        working-directory: app
     steps:
       - uses: actions/checkout@v4
 
@@ -18,7 +18,7 @@ jobs:
         with:
           node-version: 22
           cache: npm
-          cache-dependency-path: services/backend/package-lock.json
+          cache-dependency-path: app/package-lock.json
 
       - run: npm ci
       - run: npm run lint

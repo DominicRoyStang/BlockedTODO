@@ -22,7 +22,7 @@
     "uuid": "^8.3.2",
     "winston": "^3.7.2"
   },
-  "description": "Backend for BlockedTODO",
+  "description": "BlockedTODO GitHub Action app",
   "devDependencies": {
     "@babel/eslint-parser": "^7.17.0",
     "eslint": "^8.15.0",
@@ -39,7 +39,7 @@
   ],
   "license": "Prosperity Public License 3.0.0",
   "type": "module",
-  "name": "backend",
+  "name": "app",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/DominicRoyStang/BlockedTODO.git"
