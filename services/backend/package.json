@@ -22,7 +22,7 @@
     "pg": "^8.7.3",
     "pg-hstore": "^2.3.4",
     "re2": "^1.26.1",
-    "serialize-error": "^11.0.0",
+    "serialize-error": "^13.0.1",
     "tempy": "^3.0.0",
     "unzipper": "^0.10.11",
     "url-regex-safe": "^3.0.0",
