@@ -45,6 +45,7 @@
     "url": "git+https://github.com/blockedtodo/blockedtodo.git"
   },
   "scripts": {
+    "db:download": "node scripts/download-database.js",
     "db:migrate": "knex migrate:latest --knexfile=src/db/config/knexfile.js",
     "db:rollback": "knex migrate:rollback --knexfile=src/db/config/knexfile.js",
     "db:seed": "knex seed:run --knexfile=src/db/config/knexfile.js",
