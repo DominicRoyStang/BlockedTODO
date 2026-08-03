@@ -1,7 +1,7 @@
 {
   "author": "Dominic Roy-Stang",
   "bugs": {
-    "url": "https://github.com/blockedtodo/blockedtodo/issues"
+    "url": "https://github.com/DominicRoyStang/BlockedTODO/issues"
   },
   "dependencies": {
     "ajv-formats": "^2.1.1",
@@ -28,7 +28,7 @@
     "eslint": "^8.15.0",
     "jest": "^28.1.0"
   },
-  "homepage": "https://github.com/blockedtodo/blockedtodo#readme",
+  "homepage": "https://github.com/DominicRoyStang/BlockedTODO#readme",
   "keywords": [
     "blocked",
     "todo",
@@ -42,7 +42,7 @@
   "name": "backend",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/blockedtodo/blockedtodo.git"
+    "url": "git+https://github.com/DominicRoyStang/BlockedTODO.git"
   },
   "scripts": {
     "db:download": "node scripts/download-database.js",
@@ -50,7 +50,6 @@
     "db:rollback": "knex migrate:rollback --knexfile=src/db/config/knexfile.js",
     "db:seed": "knex seed:run --knexfile=src/db/config/knexfile.js",
     "lint": "eslint './**/*.js'",
-    "repl": "node --experimental-repl-await ./repl.js",
     "scan": "node src/scan.js",
     "test": "NODE_ENV=test NODE_OPTIONS=--experimental-vm-modules npm run db:migrate && NODE_ENV=test NODE_OPTIONS=--experimental-vm-modules jest",
     "test:watch": "NODE_ENV=test NODE_OPTIONS=--experimental-vm-modules npm run db:migrate && NODE_ENV=test NODE_OPTIONS=--experimental-vm-modules jest --watchAll"

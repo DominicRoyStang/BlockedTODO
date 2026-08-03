@@ -2,7 +2,7 @@
 
 Contributor: Dominic Roy-Stang
 
-Source Code: https://github.com/BlockedTODO/BlockedTODO
+Source Code: https://github.com/DominicRoyStang/BlockedTODO
 
 ## Purpose
 
