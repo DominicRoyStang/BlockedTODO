@@ -1,10 +1,12 @@
 import joi from 'joi';
 import dotenv from 'dotenv';
-import {dirpath} from './pathHelpers.js';
+import {dirpath, resolvePath} from './pathHelpers.js';
 
 // Load up variables from .env file (if present).
 // Note that if a variable is defined both in the environment and .env file, the environment variable value takes priority.
 dotenv.config({path: `${dirpath(import.meta)}/../../.env`});
+
+const backendRoot = resolvePath(dirpath(import.meta), '../..');
 
 // Define default for NODE_ENV here because other environment variable default values depend on NODE_ENV
 const NODE_ENV = process.env.NODE_ENV ?? 'development';
@@ -53,43 +55,22 @@ await loadEnvironmentVariables([
         validation: joi.string().required(),
     },
     {
-        name: 'DATABASE_HOST',
-        defaults: {development: 'database', test: 'database'},
-        validation: joi.string().required(),
-    },
-    {
-        name: 'DATABASE_PORT',
-        defaults: {development: 5432, test: 5432},
-        format: (variable) => parseInt(variable),
-        validation: joi.number().port().required(),
-    },
-    {
-        name: 'DATABASE_NAME',
-        defaults: {development: 'app-database', test: 'app-database'},
-        validation: joi.string().required(),
-    },
-    {
-        name: 'DATABASE_USER',
-        defaults: {development: 'app-database-user', test: 'app-database-user'},
-        validation: joi.string().required(),
-    },
-    {
-        name: 'DATABASE_PASSWORD',
-        secret: true,
-        defaults: {development: 'app-database-password', test: 'app-database-password'},
+        // Path to the SQLite database file. Persisted as a workflow artifact in GitHub Actions.
+        name: 'DATABASE_FILE',
+        defaults: {development: './database.db', test: './database.test.db', production: './database.db'},
         validation: joi.string().required(),
     },
     {
         // Provided automatically in GitHub Actions. Used to check watched issues and create notification issues.
         name: 'GITHUB_TOKEN',
         secret: true,
-        defaults: {test: 'github-token'},
+        defaults: {development: 'github-token', test: 'github-token'},
         validation: joi.string().required(),
     },
     {
         // Provided automatically in GitHub Actions ('owner/repo' of the repository being scanned).
         name: 'GITHUB_REPOSITORY',
-        defaults: {test: 'owner/repository'},
+        defaults: {development: 'owner/repository', test: 'owner/repository'},
         validation: joi.string().pattern(/^[^/]+\/[^/]+$/).required(),
     },
     {
@@ -105,11 +86,9 @@ const config = {
     environment: variables.NODE_ENV,
     logLevel: variables.LOG_LEVEL,
     database: {
-        host: variables.DATABASE_HOST,
-        port: variables.DATABASE_PORT,
-        name: variables.DATABASE_NAME,
-        user: variables.DATABASE_USER,
-        password: variables.DATABASE_PASSWORD,
+        // Resolve relative paths from the backend package root so knex migrations
+        // (which change cwd) and the app always use the same file.
+        file: resolvePath(backendRoot, variables.DATABASE_FILE),
     },
     github: {
         token: variables.GITHUB_TOKEN,

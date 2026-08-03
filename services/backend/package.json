@@ -13,10 +13,9 @@
     "knex": "^2.1.0",
     "objection": "^3.0.1",
     "objection-guid": "^3.1.0",
-    "pg": "^8.7.3",
-    "pg-hstore": "^2.3.4",
     "re2": "^1.26.1",
     "serialize-error": "^11.0.0",
+    "sqlite3": "^5.1.7",
     "tempy": "^3.0.0",
     "unzipper": "^0.10.11",
     "url-regex-safe": "^3.0.0",
@@ -52,8 +51,8 @@
     "lint": "eslint './**/*.js'",
     "repl": "node --experimental-repl-await ./repl.js",
     "scan": "node src/scan.js",
-    "test": "NODE_ENV=test NODE_OPTIONS=--experimental-vm-modules jest",
-    "test:watch": "NODE_ENV=test NODE_OPTIONS=--experimental-vm-modules jest --watchAll"
+    "test": "NODE_ENV=test NODE_OPTIONS=--experimental-vm-modules npm run db:migrate && NODE_ENV=test NODE_OPTIONS=--experimental-vm-modules jest",
+    "test:watch": "NODE_ENV=test NODE_OPTIONS=--experimental-vm-modules npm run db:migrate && NODE_ENV=test NODE_OPTIONS=--experimental-vm-modules jest --watchAll"
   },
   "version": "1.0.0"
 }
