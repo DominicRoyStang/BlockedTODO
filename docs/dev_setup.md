@@ -1,12 +1,25 @@
 # Local setup
 
-1. Install Docker (version 20 or higher)
-2. Install Smee client `npm install --global smee-client`
-3. Start a new channel on [smee.io](https://smee.io)
-4. Set the `SMEE_CHANNEL_URL` environment variable to the url of the channel
+1. Install Node.js 22 or higher
+2. From `services/backend`, install dependencies: `npm install`
 
-# Running the code
+# Running locally
 
-1. Set environment variables (details in the backend service's README file)
-2. `make build`
-3. `make start`
+Environment variables are defined in [`services/backend/src/utils/environment.js`](../services/backend/src/utils/environment.js). Defaults cover local development. For a real scan you need a GitHub token with `issues: write` (and `actions: write` if downloading artifacts):
+
+```bash
+cd services/backend
+npm run db:migrate
+GITHUB_TOKEN=<token> GITHUB_REPOSITORY=<owner/repo> SCAN_DIR=<path-to-code> npm run scan
+```
+
+# Tests
+
+```bash
+cd services/backend
+npm test
+```
+
+# GitHub Action
+
+This repo is packaged as a composite action (`action.yml` at the repo root). Tag releases as `v1` / `v1.x.x` so consumers can use `DominicRoyStang/BlockedTODO@v1`.

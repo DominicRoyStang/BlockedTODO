@@ -31,11 +31,34 @@ When a mentioned issue is closed, BlockedTODO will automatically open a new task
 - [License](#license)
 
 ## Installation
-Installing BlockedTODO on your GitHub repository is easy!
 
-1. Visit https://github.com/apps/blockedtodo
-2. Click install
-3. Select repositories on which to install the GitHub app
+BlockedTODO runs as a [GitHub Action](https://github.com/features/actions) in your own repository. Your code never leaves your runners.
+
+Add `.github/workflows/blockedtodo.yml`:
+
+```yaml
+name: BlockedTODO
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: '0 6 * * *'
+
+permissions:
+  contents: read
+  issues: write
+  actions: write
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: DominicRoyStang/BlockedTODO@v1
+```
+
+**Note**: BlockedTODO's state is stored in GitHub Actions artifacts. The `schedule` in the config above is required to avoid losing the state when GitHub artifacts expire after your repository's retention period (90 days by default).
 
 ## About
 ### When would I need this?
@@ -43,10 +66,10 @@ If you work with lots of dependencies and cutting-edge technologies, odds are th
 
 Since the issue is still open, you write a not-so-clean workaround in your codebase in the meantime, but you'd like to clean it up once the issue is resolved. BlockedTODO's proposed solution is to do the following:
 
-- Install BlockedTODO on your GitHub repository
+- Install BlockedTODO on your GitHub repository (add the workflow above)
 - Add a comment in your codebase referring to the open issue and describe what should be done once it's resolved
 
-BlockedTODO will then automatically open an issue on your repository when the watched issue is closed.
+BlockedTODO will then automatically open an issue on your repository when the watched issue is closed. Because it runs in your own Actions runners, your source code is never sent to a third-party service.
 
 ### Why is this better than subscribing to a GitHub issue?
 For personal repositories, the biggest benefit is that the opened issue gives you context for _why_ you are being notified.

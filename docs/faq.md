@@ -11,7 +11,7 @@ Frequently Asked Questions
 - [Are there any other reasons to use BlockedTODO that you couldn't find space to mention elsewhere?](#are-there-any-other-reasons-to-use-blockedtodo-that-you-couldnt-find-space-to-mention-elsewhere)
 
 ## What data does BlockedTODO store?
-BlockedTODO only stores issue URLs that are mentioned in your code comments, the GitHub UUID of your repo, and the UUIDs of the tasks it creates on your repository. That's it!
+State lives in a SQLite database that is stored as a GitHub Actions artifact in _your_ repository. It tracks issue URLs mentioned in your comments, your repository identity, and the notification issues BlockedTODO creates. Your source code is only read on your own Actions runners.
 
 ## Can I use a different comment pattern?
 Yes! By default, BlockedTODO will match the following prefixes:
@@ -47,17 +47,14 @@ In the short term, however, focus will remain on polishing the experience with G
 Eventually, I would like to support other task destinations such as Jira and Trello. For now, the focus is on polishing the GitHub experience.
 
 ## Can I install this on my GitLab/Bitbucket repository?
-At the moment, BlockedTODO is only available as a GitHub app. Supporting other repository hosts is a long-term goal.
+At the moment, BlockedTODO is only available as a GitHub Action. Supporting other repository hosts is a long-term goal.
 
 ## What technologies does BlockedTODO use?
 Here are some of the main ones:
 
-- **Backend**: JavaScript (NodeJS) [Express](https://expressjs.com/) server
-- **Database**: [PostgreSQL](https://www.postgresql.org/) db with [Objection](https://vincit.github.io/objection.js/) query builder
-- **Containerization**: [Docker](https://www.docker.com/) and [Docker Compose](https://docs.docker.com/compose/)
-- **Hosting**: [Google Cloud Platform](https://cloud.google.com/)
-- **CI/CD**: Google [Cloud Build](https://cloud.google.com/cloud-build)
-- **Secrets Management**: Google [Secret Manager](https://cloud.google.com/secret-manager)
+- **Runtime**: JavaScript (Node.js) GitHub Action
+- **Database**: [SQLite](https://www.sqlite.org/) with [Knex](https://knexjs.org/) and [Objection](https://vincit.github.io/objection.js/)
+- **CI**: [GitHub Actions](https://github.com/features/actions)
 
 ## Are there any other reasons to use BlockedTODO that you couldn't find space to mention elsewhere?
 
