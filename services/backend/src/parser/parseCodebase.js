@@ -1,4 +1,5 @@
 import {promises as fsPromises} from 'fs';
+import path from 'path';
 import {globby} from 'globby';
 import {logger} from '../utils/index.js';
 import {COMMENT_REGEX, issueRegex} from './regex/index.js';
@@ -48,7 +49,7 @@ const mergeScanResults = (results, codeFolder) => {
         for (const urlObject of urlList) {
             for (const [key, commentDetails] of Object.entries(urlObject)) {
                 const relativeCommentDetails = {
-                    file: commentDetails.filePath.replace(`${codeFolder}/`, ''),
+                    file: path.relative(codeFolder, commentDetails.filePath),
                     comment: commentDetails.comment,
                 };
                 if (key in referencedIssues) {
@@ -65,10 +66,13 @@ const mergeScanResults = (results, codeFolder) => {
 
 /* Take in a path to a codebase, return a set of issue URLs */
 const parseCodebase = async (codeFolder) => {
+    // Absolute cwd required for globby gitignore (relative `..` paths break ignore)
+    codeFolder = path.resolve(codeFolder);
+
     const config = await getConfig(codeFolder);
     logger.info({config});
 
-    const filesToScan = await globby(`${codeFolder}/**/*`);
+    const filesToScan = await globby('**/*', {cwd: codeFolder, gitignore: true, absolute: true});
     logger.info(`files to scan: ${filesToScan}`);
 
     // Create promises for each file to scan
