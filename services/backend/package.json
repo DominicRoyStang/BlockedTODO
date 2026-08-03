@@ -34,7 +34,7 @@
     "@babel/eslint-parser": "^7.17.0",
     "eslint": "^8.15.0",
     "jest": "^28.1.0",
-    "node-mocks-http": "^1.11.0",
+    "node-mocks-http": "^1.18.1",
     "nodemon": "^2.0.18"
   },
   "homepage": "https://github.com/blockedtodo/blockedtodo#readme",
