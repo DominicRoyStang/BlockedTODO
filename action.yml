@@ -23,38 +23,38 @@ runs:
       with:
         node-version: 22
         cache: npm
-        cache-dependency-path: ${{ steps.paths.outputs.action_root }}/services/backend/package-lock.json
+        cache-dependency-path: ${{ steps.paths.outputs.action_root }}/app/package-lock.json
 
     - name: Install dependencies
       shell: bash
-      working-directory: ${{ steps.paths.outputs.action_root }}/services/backend
+      working-directory: ${{ steps.paths.outputs.action_root }}/app
       run: npm ci
 
     - name: Download database artifact
       shell: bash
-      working-directory: ${{ steps.paths.outputs.action_root }}/services/backend
+      working-directory: ${{ steps.paths.outputs.action_root }}/app
       env:
         NODE_ENV: production
         GITHUB_TOKEN: ${{ inputs.github-token }}
-        DATABASE_FILE: ${{ steps.paths.outputs.action_root }}/services/backend/database.db
+        DATABASE_FILE: ${{ steps.paths.outputs.action_root }}/app/database.db
       run: npm run db:download
 
     - name: Migrate database
       shell: bash
-      working-directory: ${{ steps.paths.outputs.action_root }}/services/backend
+      working-directory: ${{ steps.paths.outputs.action_root }}/app
       env:
         NODE_ENV: production
         GITHUB_TOKEN: ${{ inputs.github-token }}
-        DATABASE_FILE: ${{ steps.paths.outputs.action_root }}/services/backend/database.db
+        DATABASE_FILE: ${{ steps.paths.outputs.action_root }}/app/database.db
       run: npm run db:migrate
 
     - name: Scan codebase
       shell: bash
-      working-directory: ${{ steps.paths.outputs.action_root }}/services/backend
+      working-directory: ${{ steps.paths.outputs.action_root }}/app
       env:
         NODE_ENV: production
         GITHUB_TOKEN: ${{ inputs.github-token }}
-        DATABASE_FILE: ${{ steps.paths.outputs.action_root }}/services/backend/database.db
+        DATABASE_FILE: ${{ steps.paths.outputs.action_root }}/app/database.db
         SCAN_DIR: ${{ github.workspace }}
       run: npm run scan
 
@@ -62,5 +62,5 @@ runs:
       uses: actions/upload-artifact@v4
       with:
         name: blockedtodo-database
-        path: ${{ steps.paths.outputs.action_root }}/services/backend/database.db
+        path: ${{ steps.paths.outputs.action_root }}/app/database.db
         if-no-files-found: error
