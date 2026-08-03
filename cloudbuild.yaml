@@ -5,16 +5,6 @@ steps:
   args: ['pull', 'gcr.io/$PROJECT_ID/$_BACKEND_SERVICE_NAME:latest']
   waitFor: ['-'] # Don't wait for previous build steps
 
-- id: 'Pull frontend image'
-  name: 'gcr.io/cloud-builders/docker'
-  args: ['pull', 'gcr.io/$PROJECT_ID/$_FRONTEND_SERVICE_NAME:latest']
-  waitFor: ['-'] # Don't wait for previous build steps
-
-- id: 'Pull website image'
-  name: 'gcr.io/cloud-builders/docker'
-  args: ['pull', 'gcr.io/$PROJECT_ID/$_WEBSITE_SERVICE_NAME:latest']
-  waitFor: ['-'] # Don't wait for previous build steps
-
 # Build images
 - id: 'Build backend image'
   name: 'gcr.io/cloud-builders/docker'
@@ -31,43 +21,13 @@ steps:
   - 'services/backend/.'
   waitFor: ['Pull backend image']
 
-- id: 'Build frontend image'
-  name: 'gcr.io/cloud-builders/docker'
-  args:
-  - 'build'
-  - '--file'
-  - 'services/frontend/Dockerfile'
-  - '--tag'
-  - 'frontend:latest'
-  - '--tag'
-  - 'gcr.io/$PROJECT_ID/$_FRONTEND_SERVICE_NAME:$SHORT_SHA'
-  - '--cache-from'
-  - 'gcr.io/$PROJECT_ID/$_FRONTEND_SERVICE_NAME:latest'
-  - 'services/frontend/.'
-  waitFor: ['Pull frontend image']
-
-- id: 'Build website image'
-  name: 'gcr.io/cloud-builders/docker'
-  args:
-  - 'build'
-  - '--file'
-  - 'services/website/Dockerfile'
-  - '--tag'
-  - 'website:latest'
-  - '--tag'
-  - 'gcr.io/$PROJECT_ID/$_WEBSITE_SERVICE_NAME:$SHORT_SHA'
-  - '--cache-from'
-  - 'gcr.io/$PROJECT_ID/$_WEBSITE_SERVICE_NAME:latest'
-  - 'services/website/.'
-  waitFor: ['Pull website image']
-
 # Run containers in the background
 - id: 'Run containers'
   name: 'gcr.io/cloud-builders/docker'
   args: ['compose', '--file', 'services/docker-compose.yaml', 'up', '--detach']
   env:
   - 'NODE_ENV=test'
-  waitFor: ['Build backend image', 'Build frontend image', 'Build website image']
+  waitFor: ['Build backend image']
 
 # The "Run containers" step stops when containers are running, but before the services start running.
 # The docker-start script performs steps such as installing dev dependencies and running migrations before starting the backend service.
@@ -87,80 +47,20 @@ steps:
   - '300'
   waitFor: ['Run containers']
 
-- id: 'Wait for frontend'
-  name: 'gcr.io/cloud-builders/docker'
-  args:
-  - 'compose'
-  - '--file'
-  - 'services/docker-compose.yaml'
-  - 'exec'
-  - '-T'
-  - 'backend'
-  - './scripts/wait-for.sh'
-  - 'http://frontend:3001'
-  - '--timeout'
-  - '300'
-  waitFor: ['Run containers']
-
-- id: 'Wait for website'
-  name: 'gcr.io/cloud-builders/docker'
-  args:
-  - 'compose'
-  - '--file'
-  - 'services/docker-compose.yaml'
-  - 'exec'
-  - '-T'
-  - 'backend'
-  - './scripts/wait-for.sh'
-  - 'http://website:3002'
-  - '--timeout'
-  - '300'
-  waitFor: ['Run containers']
-
 - id: 'Backend tests'
   name: 'gcr.io/cloud-builders/docker'
   args: ['compose', '--file', 'services/docker-compose.yaml', 'exec', '-T', 'backend', 'npm', 'run', 'test']
   waitFor: ['Wait for backend']
-
-- id: 'Frontend tests'
-  name: 'gcr.io/cloud-builders/docker'
-  args: ['compose', '--file', 'services/docker-compose.yaml', 'exec', '-T', 'frontend', 'npm', 'run', 'test']
-  waitFor: ['Wait for frontend']
-
-- id: 'Website tests'
-  name: 'gcr.io/cloud-builders/docker'
-  args: ['compose', '--file', 'services/docker-compose.yaml', 'exec', '-T', 'website', 'npm', 'run', 'test']
-  waitFor: ['Wait for website']
 
 - id: 'Backend Linting'
   name: 'gcr.io/cloud-builders/docker'
   args: ['compose', '--file', 'services/docker-compose.yaml', 'exec', '-T', 'backend', 'npm', 'run', 'lint']
   waitFor: ['Wait for backend']
 
-- id: 'Frontend Linting'
-  name: 'gcr.io/cloud-builders/docker'
-  args: ['compose', '--file', 'services/docker-compose.yaml', 'exec', '-T', 'frontend', 'npm', 'run', 'lint']
-  waitFor: ['Wait for frontend']
-
-- id: 'Website Linting'
-  name: 'gcr.io/cloud-builders/docker'
-  args: ['compose', '--file', 'services/docker-compose.yaml', 'exec', '-T', 'website', 'npm', 'run', 'lint']
-  waitFor: ['Wait for website']
-
 - id: 'Push backend image to registry'
   name: 'gcr.io/cloud-builders/docker'
   args: ['push', 'gcr.io/$PROJECT_ID/$_BACKEND_SERVICE_NAME:$SHORT_SHA']
   waitFor: ['Build backend image']
-
-- id: 'Push frontend image to registry'
-  name: 'gcr.io/cloud-builders/docker'
-  args: ['push', 'gcr.io/$PROJECT_ID/$_FRONTEND_SERVICE_NAME:$SHORT_SHA']
-  waitFor: ['Build frontend image']
-
-- id: 'Push website image to registry'
-  name: 'gcr.io/cloud-builders/docker'
-  args: ['push', 'gcr.io/$PROJECT_ID/$_WEBSITE_SERVICE_NAME:$SHORT_SHA']
-  waitFor: ['Build website image']
 
 - id: 'Promote backend image to latest'
   name: 'gcr.io/cloud-builders/gcloud'
@@ -170,58 +70,7 @@ steps:
   - |
     [[ "$BRANCH_NAME" == "master" ]] && gcloud container images add-tag gcr.io/$PROJECT_ID/$_BACKEND_SERVICE_NAME:$SHORT_SHA gcr.io/$PROJECT_ID/$_BACKEND_SERVICE_NAME:latest || echo "skipping..."
 
-- id: 'Promote frontend image to latest'
-  name: 'gcr.io/cloud-builders/gcloud'
-  entrypoint: 'bash'
-  args:
-  - '-c'
-  - |
-    [[ "$BRANCH_NAME" == "master" ]] && gcloud container images add-tag gcr.io/$PROJECT_ID/$_FRONTEND_SERVICE_NAME:$SHORT_SHA gcr.io/$PROJECT_ID/$_FRONTEND_SERVICE_NAME:latest || echo "skipping..."
-
-- id: 'Promote website image to latest'
-  name: 'gcr.io/cloud-builders/gcloud'
-  entrypoint: 'bash'
-  args:
-  - '-c'
-  - |
-    [[ "$BRANCH_NAME" == "master" ]] && gcloud container images add-tag gcr.io/$PROJECT_ID/$_WEBSITE_SERVICE_NAME:$SHORT_SHA gcr.io/$PROJECT_ID/$_WEBSITE_SERVICE_NAME:latest || echo "skipping..."
-
-- id: 'Fetch helm production values secret'
-  name: 'gcr.io/cloud-builders/gcloud'
-  entrypoint: 'bash'
-  args:
-  - '-c'
-  - |
-    [[ "$BRANCH_NAME" == "master" ]] && gcloud secrets versions access latest --secret=$_HELM_PRODUCTION_VALUES_SECRET_ID > production-values.yaml || echo "skipping..."
-
-# Note: this requires the helm community builder to be setup.
-# See this guide: https://cloud.google.com/cloud-build/docs/configuring-builds/use-community-and-custom-builders
-# BlockedTODO: https://github.com/helm/helm/issues/5696
-# Remove backend.image, frontend.image, and website.image overrides if @schollii's suggestion is approved
-- id: 'Deploy images to GKE cluster'
-  name: 'gcr.io/$PROJECT_ID/helm'
-  entrypoint: 'bash'
-  args:
-  - '-c'
-  - |
-    [[ "$BRANCH_NAME" == "master" ]] && \
-    gcloud container clusters get-credentials --zone "$_CLUSTER_LOCATION" "$_CLUSTER_NAME" && \
-    helm upgrade --install --values production-values.yaml \
-    --set backend.image=gcr.io/$PROJECT_ID/$_BACKEND_SERVICE_NAME:$SHORT_SHA \
-    --set frontend.image=gcr.io/$PROJECT_ID/$_FRONTEND_SERVICE_NAME:$SHORT_SHA \
-    --set website.image=gcr.io/$PROJECT_ID/$_WEBSITE_SERVICE_NAME:$SHORT_SHA \
-    blockedtodo ./helm || echo "skipping..."
-  env:
-  - 'CLOUDSDK_COMPUTE_ZONE=$_CLUSTER_LOCATION'
-  - 'CLOUDSDK_CONTAINER_CLUSTER=$_CLUSTER_NAME'
-  - 'TILLERLESS=true'
-
 substitutions: # default values
   _BACKEND_SERVICE_NAME: ''
-  _FRONTEND_SERVICE_NAME: ''
-  _WEBSITE_SERVICE_NAME: ''
-  _HELM_PRODUCTION_VALUES_SECRET_ID: ''
-  _CLUSTER_LOCATION: ''
-  _CLUSTER_NAME: ''
 
 timeout: 1800s

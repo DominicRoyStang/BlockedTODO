@@ -1,13 +1,3 @@
-# Kubernetes
-kubernetes/*-secret.yaml
-
-# Terraform
-.terraform
-terraform/blockedtodo-account.json
-*.tfstate
-*.tfstate.*
-secret.tfvars
-
 # VS Code Whitelist
 /.vscode/**
 !.vscode/launch.json

@@ -2,7 +2,7 @@
 
 Backend service to interact with the BlockedTODO database.
 
-Exposes a REST API to be used by the `frontend` service.
+Exposes an HTTP server that receives GitHub webhook events and provides health check endpoints.
 
 ## Required environment variables
 

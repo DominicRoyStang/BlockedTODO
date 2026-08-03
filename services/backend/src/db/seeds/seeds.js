@@ -1,18 +1,17 @@
-import {User, Repository, Issue, Task} from '../models/index.js';
+import {Repository, Issue, Task} from '../models/index.js';
 import {config} from '../../utils/index.js';
 import '../index.js'; // connect db
+
+const seedRepositoryNodeIds = ['user1/repo0', 'user1/repo1', 'user2/repo2', 'user3/repo3', 'someuser/repo4', 'someuser/repo5'];
 
 export const seed = async (knex) => {
     if (config.environment === 'production') {
         return;
     }
 
-    const seededUsers = await User.query().whereIn(
-        'email',
-        ['test0@test.com', 'test1@test.com', 'test2@test.com', 'test3@test.com']
-    );
+    const seededRepositories = await Repository.query().whereIn('nodeId', seedRepositoryNodeIds);
 
-    if (seededUsers.length < 4) {
+    if (seededRepositories.length < seedRepositoryNodeIds.length) {
         await deleteSeedData(knex);
         await generateSeedData(knex);
     }
@@ -20,15 +19,7 @@ export const seed = async (knex) => {
 
 const deleteSeedData = async (_knex) => {
     // Deleting these models will cascade through associated tasks and join tables.
-    await User.query().delete().whereIn(
-        'email',
-        ['test0@test.com', 'test1@test.com', 'test2@test.com', 'test3@test.com']
-    );
-
-    await Repository.query().delete().whereIn(
-        'nodeId',
-        ['user1/repo0', 'user1/repo1', 'user2/repo2', 'user3/repo3', 'someuser/repo4', 'someuser/repo5']
-    );
+    await Repository.query().delete().whereIn('nodeId', seedRepositoryNodeIds);
 
     await Issue.query().delete().whereIn(
         'url',
@@ -45,12 +36,6 @@ const deleteSeedData = async (_knex) => {
 
 /* eslint-disable */
 const generateSeedData = async (knex) => {
-    // Create users
-    const user0 = await User.query().insert({email: 'test0@test.com', password: 'password0'}); // user 0 is empty (no associations/repositories)
-    const user1 = await User.query().insert({email: 'test1@test.com', password: 'password1'}); // user 1 has many repos and issues, each issue has one task but no data is shared with other users
-    const user2 = await User.query().insert({email: 'test2@test.com', password: 'password2'}); // users 2 and 3 share some repos
-    const user3 = await User.query().insert({email: 'test3@test.com', password: 'password3'});
-
     // Create repositories
     const repository0 = await Repository.query().insert({nodeId: 'user1/repo0', installationId: 1});
     const repository1 = await Repository.query().insert({nodeId: 'user1/repo1', installationId: 1});
@@ -126,10 +111,5 @@ const generateSeedData = async (knex) => {
         repositoryId: repository4.id,
         issueId: issue5.id,
     })
-
-    // Create many-to-many associations
-    await user1.$relatedQuery('repositories').relate([repository0, repository1]);
-    await user2.$relatedQuery('repositories').relate([repository2, repository4, repository5]);
-    await user3.$relatedQuery('repositories').relate([repository3, repository4, repository5]);
 };
 /* eslint-enable */
