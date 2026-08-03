@@ -50,6 +50,7 @@
     "db:rollback": "knex migrate:rollback --knexfile=src/db/config/knexfile.js",
     "db:seed": "knex seed:run --knexfile=src/db/config/knexfile.js",
     "lint": "eslint './**/*.js'",
+    "repl": "node ./repl.js",
     "scan": "node src/scan.js",
     "test": "NODE_ENV=test NODE_OPTIONS=--experimental-vm-modules npm run db:migrate && NODE_ENV=test NODE_OPTIONS=--experimental-vm-modules jest",
     "test:watch": "NODE_ENV=test NODE_OPTIONS=--experimental-vm-modules npm run db:migrate && NODE_ENV=test NODE_OPTIONS=--experimental-vm-modules jest --watchAll"

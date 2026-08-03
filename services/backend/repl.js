@@ -1,6 +1,6 @@
 /* A repl server for BlockedTODO.
  * It behaves in a similar manner to rails console.
- * Run with `node --experimental-repl-await ./repl.js` */
+ * Run with `npm run repl` */
 import repl from 'repl';
 import knex, * as models from './src/db/index.js';
 import * as utils from './src/utils/index.js';
@@ -53,4 +53,8 @@ Object.assign(replServer.context, {
     getAllMethods,
     getOwnAttributes,
     getAllAttributes,
+});
+
+replServer.on('exit', async () => {
+    await knex.destroy();
 });
