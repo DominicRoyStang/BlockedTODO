@@ -4,19 +4,13 @@
     "url": "https://github.com/blockedtodo/blockedtodo/issues"
   },
   "dependencies": {
-    "@google-cloud/storage": "^6.5.2",
-    "@octokit/auth-app": "^3.5.3",
-    "@octokit/webhooks": "^10.0.7",
     "ajv-formats": "^2.1.1",
     "axios": "^0.27.2",
     "dotenv": "^16.0.3",
-    "express": "^4.17.1",
     "globby": "^13.1.1",
-    "graphql": "^16.5.0",
     "joi": "^17.6.0",
     "js-yaml": "^4.1.0",
     "knex": "^2.1.0",
-    "morgan": "^1.10.0",
     "objection": "^3.0.1",
     "objection-guid": "^3.1.0",
     "pg": "^8.7.3",
@@ -33,9 +27,7 @@
   "devDependencies": {
     "@babel/eslint-parser": "^7.17.0",
     "eslint": "^8.15.0",
-    "jest": "^28.1.0",
-    "node-mocks-http": "^1.11.0",
-    "nodemon": "^2.0.18"
+    "jest": "^28.1.0"
   },
   "homepage": "https://github.com/blockedtodo/blockedtodo#readme",
   "keywords": [
@@ -48,7 +40,6 @@
   ],
   "license": "Prosperity Public License 3.0.0",
   "type": "module",
-  "exports": "./src/index.js",
   "name": "backend",
   "repository": {
     "type": "git",
@@ -58,16 +49,8 @@
     "db:migrate": "knex migrate:latest --knexfile=src/db/config/knexfile.js",
     "db:rollback": "knex migrate:rollback --knexfile=src/db/config/knexfile.js",
     "db:seed": "knex seed:run --knexfile=src/db/config/knexfile.js",
-    "db:backup": "node src/jobs/backupDatabase.js",
     "lint": "eslint './**/*.js'",
     "repl": "node --experimental-repl-await ./repl.js",
-    "repositories:add-missing": "node src/jobs/addMissingGithubRepositories.js",
-    "repositories:prune": "node src/jobs/pruneGithubRepositories.js",
-    "repositories:set-missing-installation-ids": "node src/jobs/setMissingGithubInstallationIds.js",
-    "scan:all": "node src/jobs/scanRepositories.js",
-    "start": "nodemon src/",
-    "start:debug": "nodemon --inspect=0.0.0.0:9229 src/",
-    "start:prod": "node src/",
     "test": "NODE_ENV=test NODE_OPTIONS=--experimental-vm-modules jest",
     "test:watch": "NODE_ENV=test NODE_OPTIONS=--experimental-vm-modules jest --watchAll"
   },
