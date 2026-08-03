@@ -9,7 +9,6 @@ const sqliteConfig = {
     useNullAsDefault: true,
     connection: {filename: config.database.file},
     migrations: {directory: '../migrations'},
-    seeds: {directory: '../seeds'},
     /* Set column names as snake_case, but return objects with camelCase.
      * Each query written in JavaScript must be written with camelCase.
      * The conversion to snake_case will happen automatically.
