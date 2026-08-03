@@ -77,7 +77,7 @@ BlockedTODO is a dependency monitoring tool that provides convenience via automa
 **Technical debt is not only expensive, it also [compounds over time](https://dev.to/dealeron/what-s-the-interest-on-your-technical-debt-4pon)!** BlockedTODO minimizes the time your technical debt spends compounding.
 
 ## Other Questions (FAQ)
-Visit the [FAQ](./docs/faq.md). You can also ask questions by [opening an issue](https://github.com/BlockedTODO/BlockedTODO/issues/new) or [starting a discussion](https://github.com/BlockedTODO/BlockedTODO/discussions/new).
+Visit the [FAQ](./docs/faq.md). You can also ask questions by [opening an issue](https://github.com/DominicRoyStang/BlockedTODO/issues/new) or [starting a discussion](https://github.com/DominicRoyStang/BlockedTODO/discussions/new).
 
 For private inquiries, email blockedtodo@gmail.com
 
@@ -96,7 +96,7 @@ comment_prefixes: # Comment prefixes are case insensitive
 More information on the `.blockedtodo.yaml` config file [here](./docs/faq.md#can-i-use-a-different-comment-pattern).
 
 ## Contribute
-Create feature requests and bug reports by [opening an issue](https://github.com/BlockedTODO/BlockedTODO/issues/new).
+Create feature requests and bug reports by [opening an issue](https://github.com/DominicRoyStang/BlockedTODO/issues/new).
 
 Vote on issues by reacting with a thumbs up to the issues that affect you. I use reaction counts to prioritize tasks.
 

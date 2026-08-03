@@ -1,22 +1,17 @@
-# BlockedTODO Backend Service
+# BlockedTODO Backend
 
-Backend service to interact with the BlockedTODO database.
+Core scan logic for the BlockedTODO GitHub Action.
 
-Exposes an HTTP server that receives GitHub webhook events and provides health check endpoints.
+It parses the checked-out codebase for issue references in comments, tracks them in a SQLite database, and creates notification issues when watched GitHub issues are closed.
 
 ## Required environment variables
 
-See the [environment.js](./src/utils/environment.js) file for a list of environment variables used by this service.
+See [environment.js](./src/utils/environment.js) for the full list, defaults, and validation.
 
-From there, you can see default values, formatting, and validation rules.
-All environment variables used by the code should be added to the list in this file, and added to the config object exported by that file.
-
-All of the required ones are automatically set when running with `docker compose`, but they do need to be set manually on production environments.
+In GitHub Actions, `GITHUB_TOKEN` and `GITHUB_REPOSITORY` are provided automatically. The composite action also sets `DATABASE_FILE` and `SCAN_DIR`.
 
 ## Contributing
 
-Here are some coding style quirks when working on the backend service.
-
-- Always import models from the `src/db/index.js` file rather than via direct imports of the model files (except when working on a file in the same folder as the imported one)
-- Always import utils from the `src/utils/index.js` file rather than the direct imports of the utils files (except when working on a file in the same folder as the imported one)
-- Always use `config` (exported from `src/utils/index.js`) rather than `process.env` to read environment variables. More info under [Required Environment Variables](#required-environment-variables).
+- Always import models from `src/db/index.js` rather than via direct imports of the model files (except when working on a file in the same folder as the imported one)
+- Always import utils from `src/utils/index.js` rather than the direct imports of the utils files (except when working on a file in the same folder as the imported one)
+- Always use `config` (exported from `src/utils/index.js`) rather than `process.env` to read environment variables
