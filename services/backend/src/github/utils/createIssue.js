@@ -1,5 +1,5 @@
 import {URL} from 'url';
-import {logger, graphqlRequestBody, markdownHelpers} from '../../utils/index.js';
+import {logger, markdownHelpers} from '../../utils/index.js';
 
 const {inlineCode, codeBlock, lineBreak} = markdownHelpers;
 
@@ -21,29 +21,18 @@ const generateIssueBody = (issue, issueReferences) => {
     return body;
 };
 
-/* Create issue on GitHub (in the context of BlockedTODO: a task) */
+/* Create issue on GitHub (in the context of BlockedTODO: a task).
+ * The repository's nodeId is the 'owner/repo' identifier of the repository being scanned. */
 const createIssue = async (githubClient, issue, repository, issueReferences) => {
-    const body = generateIssueBody(issue, issueReferences);
     const issueUrl = new URL(issue.url);
 
-    const createIssue = graphqlRequestBody(`
-        mutation {
-            createIssue(input:{
-                repositoryId: "${repository.nodeId}",
-                title: "Unblocked TODO: ${issueUrl.pathname} was closed.",
-                body: "${body.replace(/"/g, '\\"')}"
-            }) {
-                issue {
-                    id
-                }
-            }
-        }
-    `);
-
-    const response = await githubClient.post('/graphql', createIssue);
+    const response = await githubClient.post(`/repos/${repository.nodeId}/issues`, {
+        title: `Unblocked TODO: ${issueUrl.pathname} was closed.`,
+        body: generateIssueBody(issue, issueReferences),
+    });
     logger.info(`Response from GitHub: ${response.status}`, {response});
 
-    return response.data.data.createIssue.issue;
+    return {id: response.data.node_id};
 };
 
 export default createIssue;

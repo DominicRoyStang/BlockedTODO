@@ -1,7 +1,6 @@
 import joi from 'joi';
 import dotenv from 'dotenv';
 import {dirpath} from './pathHelpers.js';
-import {urlString} from './urlHelpers.js';
 
 // Load up variables from .env file (if present).
 // Note that if a variable is defined both in the environment and .env file, the environment variable value takes priority.
@@ -81,59 +80,22 @@ await loadEnvironmentVariables([
         validation: joi.string().required(),
     },
     {
-        name: 'BACKUPS_BUCKET_NAME',
-    },
-    {
-        name: 'BACKEND_PROTOCOL',
-        defaults: {development: 'http', test: 'http', production: 'https'},
-        validation: joi.string().valid('http', 'https').required(),
-    },
-    {
-        name: 'BACKEND_HOST',
-        defaults: {development: 'localhost', test: 'localhost'},
-        validation: joi.string().required(),
-    },
-    {
-        // The backend port is the one that is publicly exposed (80 for http or 443 for https in production).
-        name: 'BACKEND_PORT',
-        defaults: {development: 3000, test: 3000},
-        format: (variable) => parseInt(variable),
-        validation: joi.number().port().required(),
-    },
-    {
-        // The internal port is the port that the app code listens on. In kubernetes terms, it is the targetPort.
-        name: 'BACKEND_INTERNAL_PORT',
-        defaults: {development: 3000, test: 3000, production: 3000},
-        format: (variable) => parseInt(variable),
-        validation: joi.number().port().required(),
-    },
-    {
-        name: 'GITHUB_WEBHOOKS_SECRET',
+        // Provided automatically in GitHub Actions. Used to check watched issues and create notification issues.
+        name: 'GITHUB_TOKEN',
         secret: true,
-        defaults: {test: 'secret'},
+        defaults: {test: 'github-token'},
         validation: joi.string().required(),
     },
     {
-        name: 'GITHUB_APP_ID',
-        defaults: {test: 'github-app-id'},
-        validation: joi.string().required(),
+        // Provided automatically in GitHub Actions ('owner/repo' of the repository being scanned).
+        name: 'GITHUB_REPOSITORY',
+        defaults: {test: 'owner/repository'},
+        validation: joi.string().pattern(/^[^/]+\/[^/]+$/).required(),
     },
     {
-        name: 'GITHUB_APP_PRIVATE_KEY',
-        secret: true,
-        defaults: {test: 'github-app-private-key'},
-        format: (variable) => variable.replaceAll('\\n', '\n'),
-        validation: joi.string().required(),
-    },
-    {
-        name: 'GITHUB_CLIENT_ID',
-        defaults: {test: 'github-client-id'},
-        validation: joi.string().required(),
-    },
-    {
-        name: 'GITHUB_CLIENT_SECRET',
-        secret: true,
-        defaults: {test: 'github-client-secret'},
+        // Path to the codebase to scan. The action sets this to the workspace directory.
+        name: 'SCAN_DIR',
+        defaults: {development: '.', test: '.', production: '.'},
         validation: joi.string().required(),
     }
 ]);
@@ -148,23 +110,12 @@ const config = {
         name: variables.DATABASE_NAME,
         user: variables.DATABASE_USER,
         password: variables.DATABASE_PASSWORD,
-        backupsBucketName: variables.BACKUPS_BUCKET_NAME,
-    },
-    backend: {
-        protocol: variables.BACKEND_PROTOCOL,
-        host: variables.BACKEND_HOST,
-        port: variables.BACKEND_PORT,
-        url: urlString(variables.BACKEND_PROTOCOL, variables.BACKEND_HOST, variables.BACKEND_PORT),
-        internalPort: variables.BACKEND_INTERNAL_PORT,
-        internalUrl: urlString(variables.BACKEND_PROTOCOL, variables.BACKEND_HOST, variables.BACKEND_PORT),
     },
     github: {
-        webhooksSecret: variables.GITHUB_WEBHOOKS_SECRET,
-        appId: variables.GITHUB_APP_ID,
-        appPrivateKey: variables.GITHUB_APP_PRIVATE_KEY,
-        clientId: variables.GITHUB_CLIENT_ID,
-        clientSecret: variables.GITHUB_CLIENT_SECRET,
+        token: variables.GITHUB_TOKEN,
+        repository: variables.GITHUB_REPOSITORY,
     },
+    scanDir: variables.SCAN_DIR,
 };
 
 export {

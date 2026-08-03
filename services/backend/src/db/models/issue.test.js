@@ -2,7 +2,7 @@ import Issue from './issue.js';
 import Repository from './repository.js';
 
 const validIssueData = async () => {
-    const repository = await Repository.query().insert({nodeId: 'abc123', installationId: 123});
+    const repository = await Repository.query().insert({nodeId: 'abc123'});
     return {url: 'http://example.com', repositoryId: repository.id};
 };
 
