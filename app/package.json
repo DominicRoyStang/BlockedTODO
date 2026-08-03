@@ -33,8 +33,8 @@
     "todo",
     "blockedtodo",
     "github",
-    "app",
-    "bot"
+    "github-actions",
+    "technical-debt"
   ],
   "license": "Prosperity Public License 3.0.0",
   "type": "module",
