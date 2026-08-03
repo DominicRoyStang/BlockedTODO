@@ -28,7 +28,6 @@ When a mentioned issue is closed, BlockedTODO will automatically open a new task
 - [The `blockedtodo.yaml` Config File](#the-blockedtodoyaml-config-file)
 - [Contribute](#contribute)
   - [Local setup](#local-setup)
-  - [Deployment](#deployment)
 - [License](#license)
 
 ## Installation
@@ -105,9 +104,6 @@ Pull requests are welcome, but please keep in mind that while the code is public
 
 ### Local setup
 See [these instructions](./docs/dev_setup.md) to set up and run the codebase locally.
-
-### Deployment
-See [these instructions](./docs/deployment.md) for instructions on deploying the services with terraform.
 
 ## License
 

@@ -55,8 +55,6 @@ Here are some of the main ones:
 - **Backend**: JavaScript (NodeJS) [Express](https://expressjs.com/) server
 - **Database**: [PostgreSQL](https://www.postgresql.org/) db with [Objection](https://vincit.github.io/objection.js/) query builder
 - **Containerization**: [Docker](https://www.docker.com/) and [Docker Compose](https://docs.docker.com/compose/)
-- **Orchestration**: [Kubernetes](https://kubernetes.io/) (GKE) with [Helm 3](https://helm.sh/) for templating
-- **Infrastructure**: [Terraform](https://www.terraform.io/)
 - **Hosting**: [Google Cloud Platform](https://cloud.google.com/)
 - **CI/CD**: Google [Cloud Build](https://cloud.google.com/cloud-build)
 - **Secrets Management**: Google [Secret Manager](https://cloud.google.com/secret-manager)

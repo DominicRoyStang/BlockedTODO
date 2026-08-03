@@ -108,28 +108,6 @@ await loadEnvironmentVariables([
         validation: joi.number().port().required(),
     },
     {
-        name: 'FRONTEND_PROTOCOL',
-        defaults: {development: 'http', test: 'http', production: 'https'},
-        validation: joi.string().valid('http', 'https').required(),
-    },
-    {
-        name: 'FRONTEND_HOST',
-        defaults: {development: 'localhost', test: 'localhost'},
-        validation: joi.string().hostname().required(),
-    },
-    {
-        name: 'FRONTEND_PORT',
-        defaults: {development: 3001, test: 3001},
-        format: (variable) => parseInt(variable),
-        validation: joi.number().port().required(),
-    },
-    {
-        name: 'ENCRYPTION_SECRET',
-        secret: true,
-        defaults: {development: 'secret', test: 'secret'},
-        validation: joi.string().required(),
-    },
-    {
         name: 'GITHUB_WEBHOOKS_SECRET',
         secret: true,
         defaults: {test: 'secret'},
@@ -180,12 +158,6 @@ const config = {
         internalPort: variables.BACKEND_INTERNAL_PORT,
         internalUrl: urlString(variables.BACKEND_PROTOCOL, variables.BACKEND_HOST, variables.BACKEND_PORT),
     },
-    frontend: {
-        protocol: variables.FRONTEND_PROTOCOL,
-        host: variables.FRONTEND_HOST,
-        port: variables.FRONTEND_PORT,
-        url: urlString(variables.FRONTEND_PROTOCOL, variables.FRONTEND_HOST, variables.FRONTEND_PORT),
-    },
     github: {
         webhooksSecret: variables.GITHUB_WEBHOOKS_SECRET,
         appId: variables.GITHUB_APP_ID,
@@ -193,7 +165,6 @@ const config = {
         clientId: variables.GITHUB_CLIENT_ID,
         clientSecret: variables.GITHUB_CLIENT_SECRET,
     },
-    encryptionSecret: variables.ENCRYPTION_SECRET,
 };
 
 export {

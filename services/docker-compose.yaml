@@ -25,45 +25,6 @@ services:
     - ./backend:/backend
     - backend-node-modules:/backend/node_modules
 
-  frontend:
-    image: frontend
-    stdin_open: true
-    depends_on:
-    - database
-    - backend
-    build:
-      context: ./frontend
-    environment:
-    - NODE_ENV
-    - REACT_APP_BACKEND_PROTOCOL=http
-    - REACT_APP_BACKEND_HOST=localhost
-    - REACT_APP_BACKEND_PORT=3000
-    command: sh ./scripts/docker-start-dev.sh
-    ports:
-    - 3001:3001
-    volumes:
-    - ./frontend:/home/node/frontend
-    - frontend-node-modules:/home/node/frontend/node_modules
-
-  website:
-    image: website
-    stdin_open: true
-    depends_on:
-    - frontend
-    build:
-      context: ./website
-    environment:
-    - NODE_ENV
-    - REACT_APP_FRONTEND_PROTOCOL=http
-    - REACT_APP_FRONTEND_HOST=localhost
-    - REACT_APP_FRONTEND_PORT=3001
-    command: sh ./scripts/docker-start-dev.sh
-    ports:
-    - 3002:3002
-    volumes:
-    - ./website:/home/node/website
-    - website-node-modules:/home/node/website/node_modules
-
   database:
     image: postgres:13.1
     environment:
@@ -76,7 +37,5 @@ services:
     - database-data:/var/lib/postgresql/data
 
 volumes:
-  frontend-node-modules:
   backend-node-modules:
-  website-node-modules:
   database-data:

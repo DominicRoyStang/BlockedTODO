@@ -1,5 +1,4 @@
 import BaseModel from './baseModel.js';
-import User from './user.js';
 import Issue from './issue.js';
 
 export default class Repository extends BaseModel {
@@ -30,18 +29,6 @@ export default class Repository extends BaseModel {
                 join: {
                     from: 'repositories.id',
                     to: 'issues.repositoryId',
-                }
-            },
-            users: {
-                relation: BaseModel.ManyToManyRelation,
-                modelClass: User,
-                join: {
-                    from: 'repositories.id',
-                    to: 'users.id',
-                    through: {
-                        from: 'user_repositories.repositoryId',
-                        to: 'user_repositories.userId',
-                    },
                 }
             }
         };

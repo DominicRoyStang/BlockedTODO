@@ -1,32 +1,18 @@
 import express from 'express';
-import cors from 'cors';
 import morgan from 'morgan';
-import cookieParser from 'cookie-parser';
-import {errorHandler, passport, sessions, githubWebhooks} from './middleware/index.js';
-import {authRouter, githubRouter} from './routes/index.js';
+import {errorHandler, githubWebhooks} from './middleware/index.js';
 
 const app = express();
 
-app.use(cors({origin: true, credentials: true}));
-app.use(express.json({limit: '10mb'}));
 app.use(morgan(':remote-addr - :remote-user [:date[clf]] ":method :url HTTP/:http-version" :status :res[content-length] :response-time ms')); // eslint-disable-line
 
-app.use(cookieParser());
-
-app.set('trust proxy', 1); // As per https://github.com/expressjs/session#cookiesecure
-app.use(sessions());
-
-app.use(passport.initialize());
-app.use(passport.session());
+app.set('trust proxy', 1);
 
 app.use(githubWebhooks);
 
 app.get('/', (req, res, next) => res.send('BlockedTODO Backend Server'));
 app.get('/ping', (req, res, next) => res.send('Pong!'));
 app.get('/health', (req, res, next) => res.send('OK'));
-
-app.use('/auth', authRouter);
-app.use('/github', githubRouter);
 
 app.use(errorHandler);
 

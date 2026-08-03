@@ -39,23 +39,6 @@ export const createInstallationClient = async (installationId) => {
     return client;
 };
 
-export const createOauthClient = async (token) => {
-    const client = axios.create({
-        baseURL: 'https://api.github.com',
-        headers: {
-            common: {
-                'Content-Type': 'application/json',
-                'Authorization': `token ${token}`, // Note: this is 'token' instead of 'Bearer'
-                'Accept': 'application/vnd.github.machine-man-preview+json',
-            }
-        }
-    });
-
-    client.interceptors.response.use(githubGraphqlErrorInterceptor);
-
-    return client;
-};
-
 // GitHub GraphQL errors return a 200 status code and drop errors in response.data.errors
 const githubGraphqlErrorInterceptor = (response) => {
     const graphqlErrors = response.data?.errors;

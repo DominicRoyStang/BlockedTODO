@@ -9,21 +9,3 @@ updates:
   ignore:
   - dependency-name: "@testing-library/*"
     update-types: ["version-update:semver-minor", "version-update:semver-patch"]
-- package-ecosystem: "npm"
-  directory: "/services/frontend"
-  schedule:
-    interval: "weekly"
-  open-pull-requests-limit: 16
-  assignees: ["DominicRoyStang"]
-  ignore:
-  - dependency-name: "@testing-library/*"
-    update-types: ["version-update:semver-minor", "version-update:semver-patch"]
-- package-ecosystem: "npm"
-  directory: "/services/website"
-  schedule:
-    interval: "weekly"
-  open-pull-requests-limit: 16
-  assignees: ["DominicRoyStang"]
-  ignore:
-  - dependency-name: "@testing-library/*"
-    update-types: ["version-update:semver-minor", "version-update:semver-patch"]
