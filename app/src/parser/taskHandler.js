@@ -1,11 +1,11 @@
-import {Task} from '../db/index.js';
 import {URL} from 'url';
 import {logger} from '../utils/index.js';
+import {WatchedIssue} from '../db/index.js';
 import {getIssue, createIssue} from '../github/utils/index.js';
 
-// Create tasks
-export const createMissingTasks = async (repository, githubClient, referencedIssues) => {
-    const issues = await repository.$relatedQuery('issues');
+/* Create notification issues for watched issues that have closed */
+export const createMissingTasks = async (githubClient, repositoryFullName, referencedIssues) => {
+    const issues = await WatchedIssue.query();
 
     const handleIssue = async (issue) => {
         const issueUrl = new URL(issue.url);
@@ -14,32 +14,32 @@ export const createMissingTasks = async (repository, githubClient, referencedIss
             return;
         }
 
-        const existingTask = await Task.query().findOne({repositoryId: repository.id, issueId: issue.id});
-        if (existingTask) {
-            logger.info(`task ${existingTask.id} already exists for issue ${issue.id} on repository ${repository.id}`);
+        if (issue.notificationIssueNodeId) {
+            logger.info(`notification already exists for watched issue ${issue.url}`);
             return;
         }
 
         const {closed} = await getIssue(githubClient, issue);
         if (!closed) {
-            logger.info(`issue ${issue.id} is still open`, {issue});
+            logger.info(`watched issue is still open: ${issue.url}`);
             return;
         }
 
-        // Create task (GitHub issue)
-        logger.info(`Creating GitHub task for issue ${issue.url} on repo ${repository.id}`);
-        const githubIssue = await createIssue(githubClient, issue, repository, referencedIssues[issue.url]);
-        logger.info(`GitHub task was created for issue ${issue.url} on repo ${repository.id}`);
+        logger.info(`Creating notification issue for ${issue.url} on ${repositoryFullName}`);
+        const githubIssue = await createIssue(
+            githubClient,
+            issue,
+            repositoryFullName,
+            referencedIssues[issue.url],
+        );
+        logger.info(`Notification issue created for ${issue.url}`);
 
-        // Create task in database
-        const task = await Task.query().insert({
-            nodeId: githubIssue.id,
-            repositoryId: repository.id,
-            issueId: issue.id,
+        const updated = await issue.$query().patchAndFetch({
+            notificationIssueNodeId: githubIssue.id,
         });
-        logger.info('Task created', {task});
+        logger.info('Watched issue marked as notified', {issue: updated});
 
-        return task;
+        return updated;
     };
 
     await Promise.allSettled(issues.map((issue) => handleIssue(issue)));

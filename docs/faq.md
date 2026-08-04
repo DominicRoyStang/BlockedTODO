@@ -11,7 +11,9 @@ Frequently Asked Questions
 - [Are there any other reasons to use BlockedTODO that you couldn't find space to mention elsewhere?](#are-there-any-other-reasons-to-use-blockedtodo-that-you-couldnt-find-space-to-mention-elsewhere)
 
 ## What data does BlockedTODO store?
-State lives in a SQLite database that is stored as a GitHub Actions artifact in _your_ repository. It tracks issue URLs mentioned in your comments, your repository identity, and the notification issues BlockedTODO creates. Your source code is only read on your own Actions runners.
+State lives in a SQLite database that is stored as a GitHub Actions artifact in _your_ repository. It tracks issue URLs mentioned in your comments and the notification issues BlockedTODO creates. Your source code is only read on your own Actions runners.
+
+If you upgrade across a breaking database schema change, delete the `blockedtodo-database` artifact from your repository's Actions artifacts and let the next run create a fresh one.
 
 ## Can I use a different comment pattern?
 Yes! By default, BlockedTODO will match the following prefixes:
