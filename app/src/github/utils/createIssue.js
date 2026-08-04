@@ -21,12 +21,11 @@ const generateIssueBody = (issue, issueReferences) => {
     return body;
 };
 
-/* Create issue on GitHub (in the context of BlockedTODO: a task).
- * The repository's nodeId is the 'owner/repo' identifier of the repository being scanned. */
-const createIssue = async (githubClient, issue, repository, issueReferences) => {
+/* Create a notification issue on the scanned repository. */
+const createIssue = async (githubClient, issue, repositoryFullName, issueReferences) => {
     const issueUrl = new URL(issue.url);
 
-    const response = await githubClient.post(`/repos/${repository.nodeId}/issues`, {
+    const response = await githubClient.post(`/repos/${repositoryFullName}/issues`, {
         title: `Unblocked TODO: ${issueUrl.pathname} was closed.`,
         body: generateIssueBody(issue, issueReferences),
     });

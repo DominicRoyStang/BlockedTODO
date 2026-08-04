@@ -1,8 +1,8 @@
-import {Issue} from '../db/index.js';
+import {WatchedIssue} from '../db/index.js';
 
-/* Delete issues that are no longer mentioned in the codebase from the repository */
-export const deleteUnreferencedIssues = async (repository, referencedIssues) => {
-    const issues = await repository.$relatedQuery('issues');
+/* Delete watched issues that are no longer mentioned in the codebase */
+export const deleteUnreferencedIssues = async (referencedIssues) => {
+    const issues = await WatchedIssue.query();
     for (const issue of issues) {
         if (issue.url in referencedIssues) {
             continue;
@@ -12,13 +12,10 @@ export const deleteUnreferencedIssues = async (repository, referencedIssues) => 
     }
 };
 
-/* Add missing issues to the database.
- * Takes a list of issue urls and creates them if they don't exist. */
-export const createMissingIssues = async (repository, referencedIssueUrls) => {
+/* Add missing watched issues to the database */
+export const createMissingIssues = async (referencedIssueUrls) => {
     const handleIssue = async (issueUrl) => {
-        const issue = await Issue.query().findOrInsert({url: issueUrl, repositoryId: repository.id});
-
-        return issue;
+        return await WatchedIssue.query().findOrInsert({url: issueUrl});
     };
 
     return await Promise.allSettled(referencedIssueUrls.map(handleIssue));
