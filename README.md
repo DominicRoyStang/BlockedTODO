@@ -55,7 +55,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: DominicRoyStang/BlockedTODO@v1
+      - uses: DominicRoyStang/BlockedTODO@v2
 ```
 
 **Note**: BlockedTODO's state is stored in GitHub Actions artifacts. The `schedule` in the config above is required to ensure the state is never lost because of artifact expiry.

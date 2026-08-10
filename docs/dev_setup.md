@@ -24,4 +24,4 @@ npm test
 
 # GitHub Action
 
-This repo is packaged as a composite action (`action.yml` at the repo root). Tag releases as `v1` / `v1.x.x` so consumers can use `DominicRoyStang/BlockedTODO@v1`.
+This repo is packaged as a composite action (`action.yml` at the repo root). Tag releases as `v2` / `v2.x.x` so consumers can use `DominicRoyStang/BlockedTODO@v2`.

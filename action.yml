@@ -2,6 +2,10 @@ name: BlockedTODO
 description: Scans the repository for BlockedTODO comments and open issues when watched issues are closed
 author: Dominic Roy-Stang
 
+branding:
+  icon: clipboard
+  color: white
+
 inputs:
   github-token:
     description: Token used to read watched issues, create notification issues, and manage the database artifact
