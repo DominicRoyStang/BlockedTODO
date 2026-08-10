@@ -32,7 +32,7 @@ When a mentioned issue is closed, BlockedTODO will automatically open a new task
 
 ## Installation
 
-BlockedTODO runs as a [GitHub Action](https://github.com/features/actions) in your own repository. Your code never leaves your runners. It is also available on the [GitHub Marketplace](https://github.com/marketplace/actions/blockedtodo).
+BlockedTODO runs as a [GitHub Action](https://github.com/features/actions) in your own repository ([GitHub Marketplace Link](https://github.com/marketplace/actions/blockedtodo)). Your code never leaves your runners.
 
 Add `.github/workflows/blockedtodo.yml`:
 
