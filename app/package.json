@@ -36,7 +36,7 @@
     "github-actions",
     "technical-debt"
   ],
-  "license": "Prosperity Public License 3.0.0",
+  "license": "MIT",
   "type": "module",
   "name": "app",
   "repository": {
