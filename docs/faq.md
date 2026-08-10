@@ -13,7 +13,7 @@ Frequently Asked Questions
 ## What data does BlockedTODO store?
 State lives in a SQLite database that is stored as a GitHub Actions artifact in _your_ repository. It tracks issue URLs mentioned in your comments and the notification issues BlockedTODO creates. Your source code is only read on your own Actions runners.
 
-If you upgrade across a breaking database schema change, delete the `blockedtodo-database` artifact from your repository's Actions artifacts and let the next run create a fresh one.
+If the database artifact is missing or was created with an incompatible schema, BlockedTODO rebuilds it and rehydrates notification state from existing `Unblocked TODO` issues in your repository so it does not create duplicates. You can still delete the `blockedtodo-database` artifact manually if you want to force a rebuild.
 
 ## Can I use a different comment pattern?
 Yes! By default, BlockedTODO will match the following prefixes:

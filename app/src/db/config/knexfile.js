@@ -1,5 +1,5 @@
 import objection from 'objection';
-import {config} from '../../utils/index.js';
+import {config, dirpath, resolvePath} from '../../utils/index.js';
 
 const {knexSnakeCaseMappers} = objection;
 const {wrapIdentifier, postProcessResponse} = knexSnakeCaseMappers();
@@ -8,7 +8,7 @@ const sqliteConfig = {
     client: 'sqlite3',
     useNullAsDefault: true,
     connection: {filename: config.database.file},
-    migrations: {directory: '../migrations'},
+    migrations: {directory: resolvePath(dirpath(import.meta), '../migrations')},
     /* Set column names as snake_case, but return objects with camelCase.
      * Each query written in JavaScript must be written with camelCase.
      * The conversion to snake_case will happen automatically.

@@ -11,7 +11,7 @@ Environment variables are defined in [`app/src/utils/environment.js`](../app/src
 
 ```bash
 cd app
-npm run db:migrate
+npm run db:setup
 GITHUB_TOKEN=<token> GITHUB_REPOSITORY=<owner/repo> SCAN_DIR=<path-to-code> npm run scan
 ```
 
