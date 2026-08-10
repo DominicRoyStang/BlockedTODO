@@ -16,25 +16,16 @@ export const deleteDatabaseFiles = (databaseFile) => {
     unlinkIfExists(`${databaseFile}-shm`);
 };
 
-/*
- * True when the DB can be migrated forward in place (not rebuilt).
+/* True when the DB can be migrated forward in place (not rebuilt).
  *
  * Compatible when all of:
  * - the database file exists
  * - knex_migrations table exists
- * - every applied migration name still exists in the migrations directory
- *
- * Incompatible (returns false) when any of:
- * - the file is missing
- * - knex_migrations is missing
- * - knex_migrations references migrations we no longer ship
- * - opening or querying the file throws
- */
+ * - every applied migration name still exists in the migrations directory */
 export const isDatabaseCompatible = async (databaseFile, migrationsDir = migrationsDirectory) => {
     if (!fs.existsSync(databaseFile)) {
         return false;
     }
-
 
     // Temporary knex connection used to inspect/delete the database file before the app opens its own connection.
     const knex = Knex({
