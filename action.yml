@@ -39,14 +39,15 @@ runs:
         DATABASE_FILE: ${{ steps.paths.outputs.action_root }}/app/database.db
       run: npm run db:download
 
-    - name: Migrate database
+    - name: Set up database
       shell: bash
       working-directory: ${{ steps.paths.outputs.action_root }}/app
       env:
         NODE_ENV: production
         GITHUB_TOKEN: ${{ inputs.github-token }}
+        GITHUB_REPOSITORY: ${{ github.repository }}
         DATABASE_FILE: ${{ steps.paths.outputs.action_root }}/app/database.db
-      run: npm run db:migrate
+      run: npm run db:setup
 
     - name: Scan codebase
       shell: bash

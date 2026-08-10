@@ -1,5 +1,6 @@
 import {URL} from 'url';
 import {logger, markdownHelpers} from '../../utils/index.js';
+import {notificationIssueTitle} from './notificationIssue.js';
 
 const {inlineCode, codeBlock, lineBreak} = markdownHelpers;
 
@@ -26,7 +27,7 @@ const createIssue = async (githubClient, issue, repositoryFullName, issueReferen
     const issueUrl = new URL(issue.url);
 
     const response = await githubClient.post(`/repos/${repositoryFullName}/issues`, {
-        title: `Unblocked TODO: ${issueUrl.pathname} was closed.`,
+        title: notificationIssueTitle(issueUrl.pathname),
         body: generateIssueBody(issue, issueReferences),
     });
     logger.info(`Response from GitHub: ${response.status}`, {response});

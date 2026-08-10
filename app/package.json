@@ -45,6 +45,7 @@
   },
   "scripts": {
     "db:download": "node scripts/download-database.js",
+    "db:setup": "node scripts/setup-database.js",
     "db:migrate": "knex migrate:latest --knexfile=src/db/config/knexfile.js",
     "db:rollback": "knex migrate:rollback --knexfile=src/db/config/knexfile.js",
     "lint": "eslint './**/*.js'",
